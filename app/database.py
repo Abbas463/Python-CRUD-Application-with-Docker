@@ -36,9 +36,11 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
     finally:
         await session.close()
 
-async def init_db() ->None:
+async def init_db() -> None:
     from app import models
 
     async with engine.begin() as connection:
         await connection.run_sync(Base.metada.create_All())
 
+async def kill_engine() -> None:
+    await engine.dispose()
