@@ -16,3 +16,9 @@ engine = create_async_engine(
     pool_prePping=True
 )
 
+AsyncSessionFactory = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    autoflush=True,
+    expire_on_commit=False
+)
