@@ -1,5 +1,6 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from unittest.mock import Base
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from app.config import settings
@@ -34,4 +35,10 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         raise
     finally:
         await session.close()
+
+async def init_db() ->None:
+    from app import models
+
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metada.create_All())
 
