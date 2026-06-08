@@ -7,3 +7,11 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore"
     )
+    POSTGRES_USER: str = "todo_user"
+    POSTGRES_PASSWORD: str = "todo_password"
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_DB: str = "todo_db"
+
+    DB_ECHO: bool = False
+    
