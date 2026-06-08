@@ -21,3 +21,9 @@ class Settings(BaseSettings):
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
+
+@lru_cache()
+def get_settings() -> Settings:
+    return Settings()
+
+settings = get_settings()

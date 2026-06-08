@@ -1,28 +1,32 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from unittest.mock import Base
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from app.config import settings
 
-#class Base(DeclarativeBase):
+
+class Base(DeclarativeBase):
+    pass
+
 
 engine = create_async_engine(
-    settings.databaseurl,
+    settings.database_url,
     echo=settings.DB_ECHO,
     pool_size=5,
-    max_overflow=10
+    max_overflow=10,
     pool_timeout=30,
     pool_recycle=1800,
-    pool_prePping=True
+    pool_pre_ping=True,
 )
+
 
 AsyncSessionFactory = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
     autoflush=True,
-    expire_on_commit=False
+    expire_on_commit=False,
 )
+
 
 @asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
@@ -36,11 +40,13 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
     finally:
         await session.close()
 
+
 async def init_db() -> None:
-    from app import models
+    from app import models  # noqa: F401
 
     async with engine.begin() as connection:
-        await connection.run_sync(Base.metada.create_All())
+        await connection.run_sync(Base.metadata.create_all)
+
 
 async def kill_engine() -> None:
     await engine.dispose()
