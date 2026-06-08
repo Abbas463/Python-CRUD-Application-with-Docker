@@ -14,4 +14,10 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = "todo_db"
 
     DB_ECHO: bool = False
-    
+
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
