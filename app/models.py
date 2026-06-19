@@ -2,14 +2,13 @@ import uuid
 from datetime import datetime
 from sqlalchemy import DateTime, String, Text, func, text
 from sqlalchemy.orm import Mapped, mapped_column
-from uuid_utils.compat import uuid7
 from app.database import Base
 
 class Task(Base):
+    __tablename__ = "tasks"
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True,
-        default=uuid7,
-
+        default=uuid.uuid4,
     )
     title: Mapped[str] = mapped_column(String(250))
     description: Mapped[str | None] = mapped_column(Text, default=None)
